@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "homeworks")
@@ -21,7 +22,8 @@ public class Homework {
     @Column(name = "homework_id", length = 36)
     private UUID homeworkId;
 
-    @Column(name = "title")
+    @NotBlank(message = "Title is required")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
@@ -46,6 +48,18 @@ public class Homework {
     private LocalDateTime updatedAt;
 
     // Getters and setters
+    public UUID getHomeworkId() {
+        return homeworkId;
+    }
+
+    public String getTitle(){
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
     }
