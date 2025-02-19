@@ -12,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private UUID id;
+    private UUID id = UUID.randomUUID();;
 
     @Column(name="email")
     private String username;
