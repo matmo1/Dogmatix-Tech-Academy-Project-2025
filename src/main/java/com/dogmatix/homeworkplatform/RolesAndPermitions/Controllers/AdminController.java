@@ -35,11 +35,30 @@ public class AdminController {
         this.enrollmentRepository = enrollmenRepository;
     }
 
+    private User findUserById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    private ClassEntity findClassById(UUID classId) {
+        return classRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+    }
+
+    private Enrollment findEnrollmentById(UUID enrollmentId) {
+        return enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+    }
+
+    private Grade findGradeById(UUID submissionId) {
+        return gradeRepository.findById(submissionId)
+                .orElseThrow(() -> new RuntimeException("Submission not found"));
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/manage-users/role/{userId}")
     public void assignUserRole(@PathVariable UUID userId, @RequestBody Set<Role> roles) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = findUserById(userId);
         user.setRoles(roles);
         userRepository.save(user);
     }
@@ -47,8 +66,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/manage-users/{userId}")
     public void assignUserEmail(@PathVariable UUID userId, @RequestParam String username) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = findUserById(userId);
         user.setUsername(username);
         userRepository.save(user);
     }
@@ -56,18 +74,16 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/manage-users/{userId}")
     public void deleteUser(@PathVariable UUID userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = findUserById(userId);
         userRepository.delete(user);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/manage-users/homework/{userId}/{submissionId}")
     public void updateGrade(@PathVariable UUID userId, @PathVariable UUID submissionId, @RequestParam BigDecimal score) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Grade grade = gradeRepository.findById(submissionId)
-                .orElseThrow(() -> new RuntimeException("Submission not found"));
+        User user = findUserById(userId);
+
+        Grade grade = findGradeById(submissionId);
 
         if (!grade.getGradeId().equals(user.getId())) {
             throw new RuntimeException("This user does not own the submission");
@@ -81,12 +97,8 @@ public class AdminController {
     @PostMapping("/manage-users/{userId}")
     public void assignClass(@PathVariable UUID userId,
                             @RequestParam UUID classId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        ClassEntity classEntity = classRepository.findById(classId)
-                .orElseThrow(() -> new RuntimeException("Class not found"));
-
+        User user = findUserById(userId);
+        ClassEntity classEntity = findClassById(classId);
         Optional<Enrollment> existingEnrollment = enrollmentRepository.findByUserIdAndClassId(userId, classId);
 
         if (existingEnrollment.isPresent()) {
