@@ -1,4 +1,4 @@
-package com.dogmatix.homeworkplatform.homeworkRepo;
+package com.dogmatix.homeworkplatform.RolesAndPermitions.Repository;
 
 import javax.sql.DataSource;
 
@@ -15,31 +15,29 @@ import org.springframework.transaction.PlatformTransactionManager;
 import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
-@EnableJpaRepositories(
-    basePackages = "com.dogmatix.homework",
-    entityManagerFactoryRef = "homeworkDBEntityManagerFactory",
-    transactionManagerRef = "homeworkDBTransactionManager"
-)
-public class HomeworkConfig {
+@EnableJpaRepositories(basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
+ entityManagerFactoryRef = "userEntityManagerFactory",
+ transactionManagerRef = "userTransactionManager")
+public class UserRepoConfig {
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.homeworkDB")
+    @ConfigurationProperties(prefix = "spring.datasource.userDB")
     public DataSource homeworkDBDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean homeworkDBEntityManagerFactoryBean(
-        @Qualifier("homeworkDBDataSource") DataSource dataSource
+    public LocalContainerEntityManagerFactoryBean userDBEntityManagerFactoryBean(
+        @Qualifier("userDBDataSource") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPackagesToScan("com.dogmatix.homeworkDB.model");
+        em.setPackagesToScan("com.dogmatix.userDB.model");
         return em;
     }
 
     @Bean
     public PlatformTransactionManager homeworkDBTransactionManager(
-        @Qualifier("homeworkDBEntityManagerFactory") EntityManagerFactory entityManagerFactory
+        @Qualifier("userDBEntityManagerFactory") EntityManagerFactory entityManagerFactory
     ) {
         return new JpaTransactionManager(entityManagerFactory);
     }

@@ -1,6 +1,5 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.Repository;
 
-import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Enrollment;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Submission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
