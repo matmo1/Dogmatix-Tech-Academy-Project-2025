@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface GradeRepository extends JpaRepository<Grade, UUID> {
     Optional<Grade> findBySubmissionId(UUID submissionId);
+
 }

@@ -1,7 +1,6 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Grade;
-import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Submission;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.User;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.GradeRepository;
@@ -74,18 +73,14 @@ public class StudentController {
     @GetMapping("/view-homework/{homeworkId}")
     public ResponseEntity<Map<String, Object>> viewHomework(@PathVariable UUID homeworkId,
                                                             @RequestParam UUID studentId) {
-        // Fetch homework details
         com.dogmatix.homeworkplatform.homework.Homework homework = homeworkRepository.findById(homeworkId)
                 .orElseThrow(() -> new RuntimeException("Homework not found"));
 
-        // Fetch submission
         Submission submission = submissionRepository.findByHomeworkIdAndStudentId(homeworkId, studentId)
                 .orElseThrow(() -> new RuntimeException("Submission not found"));
 
-        // Fetch grade
         Optional<Grade> grade = gradeRepository.findBySubmissionId(submission.getSubmissionId());
 
-        // Prepare response
         Map<String, Object> response = new HashMap<>();
         response.put("homework", homework);
         response.put("submission", submission);

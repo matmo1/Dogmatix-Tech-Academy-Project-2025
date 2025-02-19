@@ -1,48 +1,49 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.Model;
 
-
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "homeworks")
-
 public class Homework {
 
     @Id
+    @GeneratedValue(generator = "UUID")
     @Column(name = "homework_id", updatable = false, nullable = false)
-    private UUID homeworkId = UUID.randomUUID(); // Default UUID()
+    private UUID homeworkId;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "description")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "deadline", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime deadline;
 
-    @Column(name = "class_id", nullable = false)
-    private UUID classId; // References class_service_db.classes.class_id
+    @Column(name = "class_id", nullable = false, columnDefinition = "CHAR(36)")
+    private UUID classId;
 
-    @Column(name = "created_by", nullable = false)
-    private UUID createdBy; // References user_service_db.users.user_id
+    @Column(name = "created_by", nullable = false, columnDefinition = "CHAR(36)")
+    private UUID createdBy;
 
     @Column(name = "is_published", nullable = false)
-    private Boolean isPublished = false;
+    private boolean isPublished = false;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now(); // Default CURRENT_TIMESTAMP
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now(); // ON UPDATE CURRENT_TIMESTAMP
+    private LocalDateTime updatedAt;
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 
+    // Getters and Setters
     public UUID getHomeworkId() {
         return homeworkId;
     }
@@ -91,11 +92,11 @@ public class Homework {
         this.createdBy = createdBy;
     }
 
-    public Boolean getPublished() {
+    public boolean isPublished() {
         return isPublished;
     }
 
-    public void setPublished(Boolean published) {
+    public void setPublished(boolean published) {
         isPublished = published;
     }
 
