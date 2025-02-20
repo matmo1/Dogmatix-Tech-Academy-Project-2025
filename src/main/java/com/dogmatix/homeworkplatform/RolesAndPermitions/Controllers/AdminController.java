@@ -1,10 +1,7 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.*;
-import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.ClassRepository;
-import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.EnrollmentRepository;
-import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.GradeRepository;
-import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.UserRepository;
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,20 +17,14 @@ import java.util.UUID;
 public class AdminController {
 
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    private final GradeRepository gradeRepository;
+    private GradeRepository gradeRepository;
     @Autowired
-    private final ClassRepository classRepository;
+    private ClassRepository classRepository;
     @Autowired
-    private final EnrollmentRepository enrollmentRepository;
+    private EnrollmentRepository enrollmentRepository;
 
-    public AdminController(UserRepository userRepository, GradeRepository gradeRepository, ClassRepository classRepository, EnrollmentRepository enrollmenRepository) {
-        this.userRepository = userRepository;
-        this.gradeRepository = gradeRepository;
-        this.classRepository = classRepository;
-        this.enrollmentRepository = enrollmenRepository;
-    }
 
     private User findUserById(UUID userId) {
         return userRepository.findById(userId)

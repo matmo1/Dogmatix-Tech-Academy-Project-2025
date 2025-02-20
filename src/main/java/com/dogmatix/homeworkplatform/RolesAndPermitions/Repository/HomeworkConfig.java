@@ -23,13 +23,13 @@ import jakarta.persistence.EntityManagerFactory;
 public class HomeworkConfig {
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.homeworkdb")
-    public DataSource homeworkdb() {
+    public DataSource homeworkdbDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean homeworkdbEntityManagerFactoryBean(
-        @Qualifier("homeworkdb") DataSource dataSource
+    public LocalContainerEntityManagerFactoryBean homeworkdbEntityManagerFactory(
+        @Qualifier("homeworkdbDataSource") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);

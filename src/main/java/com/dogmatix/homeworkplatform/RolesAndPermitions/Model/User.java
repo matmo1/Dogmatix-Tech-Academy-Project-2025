@@ -5,14 +5,17 @@ import jakarta.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.annotations.UuidGenerator;
+
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
-    private UUID id = UUID.randomUUID();;
+    @GeneratedValue
+    @UuidGenerator
+    @Column(name = "user_id", length = 36, updatable = false, nullable = false)
+    private UUID userId;
 
     @Column(name="email")
     private String username;
@@ -25,11 +28,11 @@ public class User {
     private Set<Role> role;
 
     public UUID getId() {
-        return id;
+        return userId;
     }
 
     public void setId(UUID id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public String getUsername() {

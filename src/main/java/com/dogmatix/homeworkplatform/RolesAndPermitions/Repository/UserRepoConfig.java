@@ -15,19 +15,21 @@ import org.springframework.transaction.PlatformTransactionManager;
 import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
- entityManagerFactoryRef = "userdbEntityManagerFactory",
- transactionManagerRef = "userdbTransactionManager")
+@EnableJpaRepositories(
+    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
+    entityManagerFactoryRef = "userdbEntityManagerFactory",
+    transactionManagerRef = "userdbTransactionManager"
+)
 public class UserRepoConfig {
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.userdb")
-    public DataSource userdb() {
+    public DataSource userdbDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean userdbEntityManagerFactoryBean(
-        @Qualifier("userdb") DataSource dataSource
+    public LocalContainerEntityManagerFactoryBean userdbEntityManagerFactorygit (
+        @Qualifier("userdbDataSource") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
