@@ -4,7 +4,7 @@ import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Grade;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Submission;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.User;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.GradeRepository;
-import com.dogmatix.homeworkplatform.homeworkRepo.HomeworkRepository;
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.HomeworkRepository;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.SubmissionRepository;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class StudentController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    private com.dogmatix.homeworkplatform.homework.Homework findHomeworkById(UUID homeworkId) {
+    private com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework findHomeworkById(UUID homeworkId) {
         return homeworkRepository.findById(homeworkId)
                 .orElseThrow(() -> new RuntimeException("Homework not found"));
     }
@@ -57,7 +57,7 @@ public class StudentController {
                                @RequestParam String attachment_url) {
         User student = findUserById(studentId);
 
-        com.dogmatix.homeworkplatform.homework.Homework homework = findHomeworkById(homeworkId);
+        com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework homework = findHomeworkById(homeworkId);
 
         Submission submission = new Submission();
         submission.setHomeworkId(homework.getHomeworkId());
@@ -73,7 +73,7 @@ public class StudentController {
     @GetMapping("/view-homework/{homeworkId}")
     public ResponseEntity<Map<String, Object>> viewHomework(@PathVariable UUID homeworkId,
                                                             @RequestParam UUID studentId) {
-        com.dogmatix.homeworkplatform.homework.Homework homework = homeworkRepository.findById(homeworkId)
+        com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework homework = homeworkRepository.findById(homeworkId)
                 .orElseThrow(() -> new RuntimeException("Homework not found"));
 
         Submission submission = submissionRepository.findByHomeworkIdAndStudentId(homeworkId, studentId)

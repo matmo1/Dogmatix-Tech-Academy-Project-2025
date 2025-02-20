@@ -1,4 +1,4 @@
-package com.dogmatix.homeworkplatform.homeworkRepo;
+package com.dogmatix.homeworkplatform.RolesAndPermitions.Repository;
 
 import javax.sql.DataSource;
 
@@ -16,30 +16,31 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "com.dogmatix.homework",
-    entityManagerFactoryRef = "homeworkDBEntityManagerFactory",
-    transactionManagerRef = "homeworkDBTransactionManager"
+    basePackages = "com.dogmatix.homeworkplatform.RolesAndPremitions.Repository",
+    entityManagerFactoryRef = "homeworkdbEntityManagerFactory",
+    transactionManagerRef = "homeworkdbTransactionManager"
 )
 public class HomeworkConfig {
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.homeworkDB")
-    public DataSource homeworkDBDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.homeworkdb")
+    public DataSource homeworkdb() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean homeworkDBEntityManagerFactoryBean(
-        @Qualifier("homeworkDBDataSource") DataSource dataSource
+    public LocalContainerEntityManagerFactoryBean homeworkdbEntityManagerFactoryBean(
+        @Qualifier("homeworkdb") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPackagesToScan("com.dogmatix.homeworkDB.model");
+        em.setPackagesToScan("com.dogmatix.homeworkplatform.RolesAndPermitions.Model");
+        em.setJpaVendorAdapter(new org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter());
         return em;
     }
 
     @Bean
-    public PlatformTransactionManager homeworkDBTransactionManager(
-        @Qualifier("homeworkDBEntityManagerFactory") EntityManagerFactory entityManagerFactory
+    public PlatformTransactionManager homeworkdbTransactionManager(
+        @Qualifier("homeworkdbEntityManagerFactory") EntityManagerFactory entityManagerFactory
     ) {
         return new JpaTransactionManager(entityManagerFactory);
     }

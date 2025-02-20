@@ -16,28 +16,29 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
- entityManagerFactoryRef = "userEntityManagerFactory",
- transactionManagerRef = "userTransactionManager")
+ entityManagerFactoryRef = "userdbEntityManagerFactory",
+ transactionManagerRef = "userdbTransactionManager")
 public class UserRepoConfig {
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.userDB")
-    public DataSource homeworkDBDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.userdb")
+    public DataSource userdb() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean userDBEntityManagerFactoryBean(
-        @Qualifier("userDBDataSource") DataSource dataSource
+    public LocalContainerEntityManagerFactoryBean userdbEntityManagerFactoryBean(
+        @Qualifier("userdb") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPackagesToScan("com.dogmatix.userDB.model");
+        em.setPackagesToScan("com.dogmatix.homeworkplatform.RolesAndPermitions.Model");
+        em.setJpaVendorAdapter(new org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter());
         return em;
     }
 
     @Bean
-    public PlatformTransactionManager homeworkDBTransactionManager(
-        @Qualifier("userDBEntityManagerFactory") EntityManagerFactory entityManagerFactory
+    public PlatformTransactionManager userdbTransactionManager(
+        @Qualifier("userdbEntityManagerFactory") EntityManagerFactory entityManagerFactory
     ) {
         return new JpaTransactionManager(entityManagerFactory);
     }

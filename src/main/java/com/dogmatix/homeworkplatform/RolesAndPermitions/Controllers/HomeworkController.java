@@ -1,9 +1,9 @@
-package com.dogmatix.homeworkplatform.homeworkController;
+package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dogmatix.homeworkplatform.homework.Homework;
-import com.dogmatix.homeworkplatform.homeworkRepo.HomeworkRepository;
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework;
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.HomeworkRepository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,8 +28,8 @@ public class HomeworkController {
     @Autowired
     private HomeworkRepository homeworkRepository;
 
-    @GetMapping("/homework/{id}")
-    public ResponseEntity<Homework> getSpecificHomework(@RequestParam UUID homeworkUuid) {
+    @GetMapping("/homework/{homeworkUuid}")
+    public ResponseEntity<Homework> getSpecificHomework(@PathVariable UUID homeworkUuid) {
     Optional<Homework> homework = homeworkRepository.findById(homeworkUuid);
     return homework.map(ResponseEntity::ok)
                   .orElseGet(() -> ResponseEntity.notFound().build());

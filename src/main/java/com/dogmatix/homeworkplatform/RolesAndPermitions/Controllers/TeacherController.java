@@ -76,7 +76,7 @@ public class TeacherController {
             throw new RuntimeException("Not the homework owner");
         }
 
-        homework.setPublished(true);
+        homework.setIsPublished(true);
         return homeworkRepository.save(homework);
     }
 
