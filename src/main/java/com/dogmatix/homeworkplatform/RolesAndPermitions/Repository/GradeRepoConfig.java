@@ -16,20 +16,20 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
-    entityManagerFactoryRef = "userdbEntityManagerFactory",
-    transactionManagerRef = "userdbTransactionManager"
+    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.GradeRepository",
+    entityManagerFactoryRef = "gradingdbEntityManagerFactory",
+    transactionManagerRef = "gradingdbTransactionManager"
 )
-public class UserRepoConfig {
+public class GradeRepoConfig {
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.userdb")
-    public DataSource userdbDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.gradingdb")
+    public DataSource gradingdbDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean userdbEntityManagerFactory (
-        @Qualifier("userdbDataSource") DataSource dataSource
+    public LocalContainerEntityManagerFactoryBean gradingdbEntityManagerFactory (
+        @Qualifier("gradingdbDataSource") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
@@ -39,8 +39,8 @@ public class UserRepoConfig {
     }
 
     @Bean
-    public PlatformTransactionManager userdbTransactionManager(
-        @Qualifier("userdbEntityManagerFactory") EntityManagerFactory entityManagerFactory
+    public PlatformTransactionManager gradingdbTransactionManager(
+        @Qualifier("gradingdbEntityManagerFactory") EntityManagerFactory entityManagerFactory
     ) {
         return new JpaTransactionManager(entityManagerFactory);
     }
