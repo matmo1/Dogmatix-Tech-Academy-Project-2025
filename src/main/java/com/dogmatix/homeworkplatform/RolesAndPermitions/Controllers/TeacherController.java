@@ -2,6 +2,7 @@ package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.*;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,27 +16,18 @@ import java.util.*;
 @RequestMapping("/teacher")
 public class TeacherController {
 
-    private final HomeworkRepository homeworkRepository;
-    private final SubmissionRepository submissionRepository;
-    private final GradeRepository gradeRepository;
-    private final ClassRepository classRepository;
-    private final EnrollmentRepository enrollmentRepository;
-    private final UserRepository userRepository;
-
+    @Autowired    
+    private HomeworkRepository homeworkRepository;
+    @Autowired 
+    private SubmissionRepository submissionRepository;
     @Autowired
-    public TeacherController(HomeworkRepository homeworkRepository,
-                             SubmissionRepository submissionRepository,
-                             GradeRepository gradeRepository,
-                             ClassRepository classRepository,
-                             EnrollmentRepository enrollmentRepository,
-                             UserRepository userRepository) {
-        this.homeworkRepository = homeworkRepository;
-        this.submissionRepository = submissionRepository;
-        this.gradeRepository = gradeRepository;
-        this.classRepository = classRepository;
-        this.enrollmentRepository = enrollmentRepository;
-        this.userRepository = userRepository;
-    }
+    private GradeRepository gradeRepository;
+    @Autowired
+    private ClassRepository classRepository;
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/homeworks")

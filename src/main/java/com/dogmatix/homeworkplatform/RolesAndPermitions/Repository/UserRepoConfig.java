@@ -16,7 +16,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
+    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.UserRepository",
     entityManagerFactoryRef = "userdbEntityManagerFactory",
     transactionManagerRef = "userdbTransactionManager"
 )
@@ -28,7 +28,7 @@ public class UserRepoConfig {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean userdbEntityManagerFactorygit (
+    public LocalContainerEntityManagerFactoryBean userdbEntityManagerFactory (
         @Qualifier("userdbDataSource") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();

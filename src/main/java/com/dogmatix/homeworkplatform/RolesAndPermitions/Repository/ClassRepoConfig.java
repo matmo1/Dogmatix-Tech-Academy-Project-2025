@@ -16,20 +16,20 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "com.dogmatix.homeworkplatform.RolesAndPremitions.Repository.HomeworkRepository",
-    entityManagerFactoryRef = "homeworkdbEntityManagerFactory",
-    transactionManagerRef = "homeworkdbTransactionManager"
+    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.ClassRepository",
+    entityManagerFactoryRef = "classesdbEntityManagerFactory",
+    transactionManagerRef = "classesdbTransactionManager"
 )
-public class HomeworkConfig {
+public class ClassRepoConfig {
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.homeworkdb")
-    public DataSource homeworkdbDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.classesdb")
+    public DataSource classesdbDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean homeworkdbEntityManagerFactory(
-        @Qualifier("homeworkdbDataSource") DataSource dataSource
+    public LocalContainerEntityManagerFactoryBean classesdbEntityManagerFactory (
+        @Qualifier("classesdbDataSource") DataSource dataSource
     ) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
@@ -39,8 +39,8 @@ public class HomeworkConfig {
     }
 
     @Bean
-    public PlatformTransactionManager homeworkdbTransactionManager(
-        @Qualifier("homeworkdbEntityManagerFactory") EntityManagerFactory entityManagerFactory
+    public PlatformTransactionManager classesdbTransactionManager(
+        @Qualifier("classesdbEntityManagerFactory") EntityManagerFactory entityManagerFactory
     ) {
         return new JpaTransactionManager(entityManagerFactory);
     }
