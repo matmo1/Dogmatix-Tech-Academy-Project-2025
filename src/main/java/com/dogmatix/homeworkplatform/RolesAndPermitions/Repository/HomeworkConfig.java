@@ -16,7 +16,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "com.dogmatix.homeworkplatform.RolesAndPremitions.Repository.HomeworkRepository",
+    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.HomeworkRepository",
     entityManagerFactoryRef = "homeworkdbEntityManagerFactory",
     transactionManagerRef = "homeworkdbTransactionManager"
 )
