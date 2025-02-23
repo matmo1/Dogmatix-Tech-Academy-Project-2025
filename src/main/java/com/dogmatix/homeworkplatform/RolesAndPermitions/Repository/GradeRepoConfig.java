@@ -1,5 +1,7 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.Repository;
 
+import java.util.Properties;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,6 +37,11 @@ public class GradeRepoConfig {
         em.setDataSource(dataSource);
         em.setPackagesToScan("com.dogmatix.homeworkplatform.RolesAndPermitions.Model");
         em.setJpaVendorAdapter(new org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter());
+
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
+        properties.put("hibernate.hbm2ddl.auto", "update"); // Optional: for schema updates
+        em.setJpaProperties(properties);
         return em;
     }
 
