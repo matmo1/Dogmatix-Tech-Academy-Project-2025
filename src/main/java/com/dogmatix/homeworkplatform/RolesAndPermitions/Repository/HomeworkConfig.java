@@ -20,7 +20,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.HomeworkRepository",
+    basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
     entityManagerFactoryRef = "homeworkdbEntityManagerFactory",
     transactionManagerRef = "homeworkdbTransactionManager",
 excludeFilters = {

@@ -23,17 +23,21 @@ import jakarta.persistence.EntityManagerFactory;
     basePackages = "com.dogmatix.homeworkplatform.RolesAndPermitions.Repository",
     excludeFilters = {
         @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = SubmissionRepository.class),
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = SubmissionRepository.class
+        ),
         @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = UserRepository.class),
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = UserRepository.class
+        ),
         @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = GradeRepository.class),
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = GradeRepository.class
+        ),
         @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = HomeworkRepository.class),
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = HomeworkRepository.class
+        )
     },
     entityManagerFactoryRef = "classesdbEntityManagerFactory",
     transactionManagerRef = "classesdbTransactionManager"
