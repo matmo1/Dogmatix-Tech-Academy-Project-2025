@@ -16,15 +16,14 @@ public class UserService {
     private UserRepository userRepository;
     
     public boolean validateUser(String username, String password) {
-        Optional<User> userOp = userRepository.findByUsername(username);
-        User user = userOp.get();
-        return user != null && user.getPassword().equals(password);
-    }
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.isPresent() && user.get().getPassword().equals(password);
+        }
 
     public boolean createUser(String username, 
     String password,  
     Set<Role> role) {
-        if (userRepository.findByUsername(username) != null) {
+        if (userRepository.findByUsername(username).isPresent()) {
             return false;
         }
         User user = new User();
