@@ -1,0 +1,246 @@
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgb(23, 196, 23), rgb(80, 163, 240));
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.text {
+    font-size: 36px;
+    color: rgb(25, 160, 25);
+    font-weight: bold;
+}
+
+.underline {
+    width: 70px;
+    height: 5px;
+    background: rgb(23, 196, 23);
+    border-radius: 10px;
+}
+
+.inputs {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    background: rgb(224, 228, 233);
+    border-radius: 5px;
+    padding: 10px;
+    height: 55px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.input img {
+    margin: 0 15px;
+    width: 24px;
+}
+
+.input input {
+    flex: 1;
+    height: 40px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    color: #333;
+}
+
+.input input::placeholder {
+    color: #888;
+}
+
+.role-dropdown {
+    width: 90%;             
+    max-width: 400px;    
+    display: flex;
+    justify-content: left;
+    margin-top: 10px;
+    margin-bottom: 20px; 
+    margin-right: 5.5%;
+}
+
+.role-select {
+    width: 60%;            
+    height: 40px;           
+    background: rgb(224, 228, 233);
+    border-radius: 5px;
+    font-size: 14px;
+    padding-left: 10px;
+    color: #333;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.role-select:focus {
+    border: 2px solid rgb(23, 196, 23);
+}
+
+.submit-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 15px;
+    padding: 0 10%;
+    width: 100%; /* Adjusted to make it flexible */
+    max-width: 100%;
+}
+
+.submit {
+    flex: 1;
+    max-width: 120px;
+    background: green;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 12px 0;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: none;
+}
+
+.submit:hover {
+    background: darkgreen;
+}
+
+.submit.gray {
+    background: rgb(224, 228, 233);
+    color: #797979;
+    cursor: pointer;
+}
+
+/* Media Queries for Smaller Screens (Under 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .text {
+        font-size: 28px;
+    }
+
+    .submit-container {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 10px;
+        padding: 0 10%;
+    }
+
+    .submit {
+        max-width: 100%; /* Ensure buttons stretch to fill available space */
+        padding: 14px 0;
+    }
+
+    .input {
+        height: 50px;
+        width: 100%;
+    }
+
+    .input img {
+        width: 20px;
+    }
+
+    .input input {
+        font-size: 16px;
+    }
+
+    .role-dropdown {
+        width: 100%;
+    }
+
+    .role-select {
+        font-size: 14px;
+        height: 40px;
+    }
+}
+
+/* Media Queries for Medium Screens (Between 480px and 768px) */
+@media (max-width: 768px) {
+    .container {
+        padding: 25px;
+        max-width: 80%;
+    }
+
+    .text {
+        font-size: 32px;
+    }
+
+    .input {
+        width: 85%;
+    }
+
+    .role-dropdown {
+        width: 85%;
+    }
+
+    .role-select {
+        font-size: 14px;
+        height: 40px;
+    }
+
+    .submit-container {
+        gap: 10px;
+        padding: 0 15%;
+    }
+
+    .submit {
+        padding: 14px 0;
+    }
+}
+
+/* Media Queries for Large Screens (Above 768px) */
+@media (min-width: 768px) {
+    .container {
+        padding: 30px;
+        max-width: 450px;
+    }
+
+    .text {
+        font-size: 36px;
+    }
+
+    .input {
+        width: 90%;
+    }
+
+    .submit-container {
+        gap: 15px;
+    }
+
+    .submit {
+        padding: 14px 0;
+    }
+}
