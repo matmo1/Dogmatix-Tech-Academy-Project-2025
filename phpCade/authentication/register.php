@@ -1,9 +1,4 @@
 <?php
-session_start();
-require('db.php');
-
-$registration_message = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -12,19 +7,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subjects = isset($_POST['subjects']) ? implode(", ", $_POST['subjects']) : NULL;
     $grade = isset($_POST['grade']) && $_POST['role'] == 'student' ? $_POST['grade'] : NULL;
 
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Send data to Spring Boot API
+    $url = 'http://localhost:8080/api/register';
+    $data = json_encode([
+        'username' => $username,
+        'password' => $password,
+        'email' => $email,
+        'role' => $role,
+        'subjects' => $subjects,
+        'grade' => $grade,
+    ]);
 
-    $sql = "INSERT INTO users (username, email, password, role, subjects, grade) VALUES (?, ?, ?, ?, ?, ?)";
-    if ($stmt = $con->prepare($sql)) {
-        $stmt->bind_param("ssssss", $username, $email, $hashed_password, $role, $subjects, $grade);
-        if ($stmt->execute()) {
-            $registration_message = "<b>Successfully registered.</b>";
-        } else {
-            $registration_message = "Error while trying to register, try again.";
-        }
-        $stmt->close();
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/json\r\n",
+            'method'  => 'POST',
+            'content' => $data,
+        ],
+    ];
+
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+
+    if ($result === FALSE) {
+        die('Error calling Spring Boot API');
+    }
+
+    $response = json_decode($result, true);
+
+    if ($response['status'] === 'success') {
+        echo json_encode(["status" => "success", "message" => "Registration successful"]);
     } else {
-        $registration_message = "Error while trying to register, try again.";
+        echo json_encode(["status" => "error", "message" => $response['message']]);
     }
 }
 ?>

@@ -1,39 +1,37 @@
 <?php
 session_start();
-require('db.php');
-
-$login_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT user_id, username, password FROM users WHERE username = ?";
-    
-    if ($stmt = $con->prepare($sql)) {
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $stmt->store_result();
-        
-        if ($stmt->num_rows == 1) {
-            $stmt->bind_result($id, $stored_username, $stored_password);
-            $stmt->fetch();
+    // Send data to Spring Boot API
+    $url = 'http://localhost:8080/api/login';
+    $data = json_encode(['username' => $username, 'password' => $password]);
 
-            if (password_verify($password, $stored_password)) {
-                $_SESSION['user_id'] = $id;
-                $_SESSION['username'] = $stored_username;
-                
-                header("Location: index.php");
-                exit();
-            } else {
-                $login_message = "Invalid password.";
-            }
-        } else {
-            $login_message = "No account found with that username.";
-        }
-        $stmt->close();
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/json\r\n",
+            'method'  => 'POST',
+            'content' => $data,
+        ],
+    ];
+
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+
+    if ($result === FALSE) {
+        die('Error calling Spring Boot API');
+    }
+
+    $response = json_decode($result, true);
+
+    if ($response['status'] === 'success') {
+        // Store user session in PHP
+        $_SESSION['username'] = $username;
+        echo json_encode(["status" => "success", "message" => "Login successful"]);
     } else {
-        $login_message = "Database error. Please try again later.";
+        echo json_encode(["status" => "error", "message" => $response['message']]);
     }
 }
 ?>
