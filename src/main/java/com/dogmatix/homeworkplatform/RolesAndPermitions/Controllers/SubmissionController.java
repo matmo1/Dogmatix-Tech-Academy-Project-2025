@@ -2,7 +2,11 @@ package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Submission;
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Service.SubmissionService;
+
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -12,7 +16,7 @@ public class SubmissionController {
     private SubmissionService submissionService;
 
     @GetMapping("/student/{studentId}")
-    public List<Submission> getSubmissionsByStudentId(@PathVariable UUID studentId) {
+    public Optional<Submission> getSubmissionsByStudentId(@PathVariable UUID studentId) {
         return submissionService.getSubmissionsByStudentId(studentId);
     }
 

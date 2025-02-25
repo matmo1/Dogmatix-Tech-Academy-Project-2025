@@ -2,16 +2,20 @@ package com.dogmatix.homeworkplatform.RolesAndPermitions.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Submission;
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.SubmissionRepository;
+
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class SubmissionService {
     @Autowired
-    private SubmissionRepo submissionRepo;
+    private SubmissionRepository submissionRepo;
 
-    public List<Submission> getSubmissionsByStudentId(UUID studentId) {
-        return submissionRepo.findByStudentId(studentId);
+    public Optional<Submission> getSubmissionsByStudentId(UUID studentId) {
+        return submissionRepo.findById(studentId);
     }
 
     public Submission saveSubmission(Submission submission) {
