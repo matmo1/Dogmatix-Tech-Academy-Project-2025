@@ -25,6 +25,7 @@ public class User {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
+    @Column(name="role")
     private Set<Role> role;
 
     public UUID getId() {
