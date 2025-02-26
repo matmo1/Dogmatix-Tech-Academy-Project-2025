@@ -2,14 +2,18 @@ package com.dogmatix.homeworkplatform.RolesAndPermitions.Model;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -23,10 +27,9 @@ public class User {
     @Column(name="password_hash")
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @Column(columnDefinition = "ENUM('STUDENT', 'ADMIN', 'TEACHER')")
     @Enumerated(EnumType.STRING)
-    @Column(name="role")
-    private Set<Role> role;
+    private Role role;
 
     public UUID getId() {
         return userId;
@@ -44,6 +47,12 @@ public class User {
         this.username = username;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority auth = new SimpleGrantedAuthority("ROLE_" + getRole().name().toUpperCase());
+        return Stream.of(auth).toList();
+    }
+
     public String getPassword() {
         return password;
     }
@@ -52,11 +61,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.role = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

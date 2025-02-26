@@ -1,13 +1,12 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.DTOs;
 
-import java.util.Set;
 
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Role;
 
 public class RegisterRequest {
     private String username;
     private String password;
-    private Set<Role> role;
+    private Role role;
     // Getters and Setters
     public String getUsername() {
         return username;
@@ -25,11 +24,11 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public Set<Role> getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(Set<Role> role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

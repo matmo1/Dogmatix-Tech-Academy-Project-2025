@@ -3,40 +3,43 @@ package com.dogmatix.homeworkplatform.RolesAndPermitions.Model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.persistence.Lob;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.UuidGenerator;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "homeworks")
 public class Homework {
 
     @Id
-    @GeneratedValue
-    @UuidGenerator
-    @Column(name = "homework_id", length = 36, updatable = false, nullable = false)
-    private UUID homeworkId;
+    @Column(name = "homework_id", updatable = false, nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID homeworkId = UUID.randomUUID(); // Default UUID()
 
     @NotBlank(message = "Title is required")
     @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
+    @Lob
     private String description;
 
     @Column(name = "deadline")
     private LocalDateTime deadline;
 
-    @Column(name = "class_id", nullable = false, length = 36)
+    @Column(name = "class_id", nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID classId;
 
-    @Column(name = "created_by", nullable = false, length = 36)
+    @Column(name = "created_by", nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID createdBy;
 
     @Column(name = "is_published", columnDefinition = "BOOLEAN DEFAULT FALSE")

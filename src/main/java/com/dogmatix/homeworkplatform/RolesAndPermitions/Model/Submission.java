@@ -2,6 +2,9 @@ package com.dogmatix.homeworkplatform.RolesAndPermitions.Model;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -13,10 +16,12 @@ public class Submission {
     @Column(name = "submission_id", updatable = false, nullable = false)
     private UUID submissionId = UUID.randomUUID(); // Default UUID()
 
-    @Column(name = "homework_id", nullable = false)
+    @Column(name = "homework_id", nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID homeworkId; // References homeworks table
 
-    @Column(name = "student_id", nullable = false)
+    @Column(name = "student_id", nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID studentId; // References user_service_db.users.user_id
 
     @Column(name = "content")

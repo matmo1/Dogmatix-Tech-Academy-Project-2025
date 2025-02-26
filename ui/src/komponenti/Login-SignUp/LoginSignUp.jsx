@@ -5,7 +5,12 @@ import user_icon from "./user.png";
 import mail_icon from "./mail.png";
 import password_icon from "./password.png";
 
+import { useNavigate } from 'react-router-dom'
+
+import axios from 'axios';
+
 export const LoginSignUp = () => {
+    const navigate = useNavigate();
     const [action, setAction] = useState("Sign Up");
     const [role, setRole] = useState("Student");
     const [formData, setFormData] = useState({
@@ -21,6 +26,23 @@ export const LoginSignUp = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Form Data:", formData, "Role:", role);
+        postData(formData.email, formData.password);
+    };
+
+    const postData = async (username, password) => {
+        axios.post('http://localhost:8080/api/login', {username, password}) // Replace with your API URL
+        .then((response) => {
+            if(response?.data?.role === 'STUDENT') {
+                navigate('/stream/Math?type=student');
+            } else if(response?.data?.role === 'TEACHER') {
+                //navigate('/stream/Math?type=student');
+            } else if(response?.data?.role === 'ADMIN') {
+                //navigate('/stream/Math?type=student');
+            }
+        })
+        .catch((error) => {
+            console.log(error.message); // Handle any errors
+        });
     };
 
     return (
@@ -48,7 +70,7 @@ export const LoginSignUp = () => {
                 <div className="input">
                     <img src={mail_icon} alt="Mail Icon" />
                     <input
-                        type="email"
+                        type="text"
                         name="email"
                         placeholder="Имейл"
                         value={formData.email}
@@ -99,6 +121,9 @@ export const LoginSignUp = () => {
                         onClick={() => setAction("Login")}
                     >
                         Login
+                    </button>
+                    <button type='submit'>
+                        Submit Form
                     </button>
                 </div>
             </form>

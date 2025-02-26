@@ -9,7 +9,8 @@ import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.SubmissionRep
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -49,34 +50,28 @@ public class StudentController {
                 .orElseThrow(() -> new RuntimeException("Homework not found"));
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
-    @GetMapping("/submit-homework/{homeworkId}")
-    public void submitHomework(@PathVariable UUID homeworkId,
-                               @RequestParam UUID studentId,
-                               @RequestParam String content,
-                               @RequestParam String attachment_url) {
-        User student = findUserById(studentId);
+    //@PreAuthorize("hasRole('STUDENT')")
+    @PostMapping("/submit-homework")
+    public ResponseEntity<?> submitHomework(@RequestBody Submission submission,
+                               @AuthenticationPrincipal UserDetails loggedStudent) {
 
-        com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework homework = findHomeworkById(homeworkId);
+        //com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework homework = findHomeworkById(submission.getHomeworkId());
 
-        Submission submission = new Submission();
-        submission.setHomeworkId(homework.getHomeworkId());
-        submission.setStudentId(student.getId());
-        submission.setContent(content);
-        submission.setAttachmentUrl(attachment_url);
+        submission.setStudentId(((User)loggedStudent).getId());
         submission.setSubmittedAt(LocalDateTime.now());
 
-        submissionRepository.save(submission);
+      submission = submissionRepository.save(submission);
+      return ResponseEntity.ok().body(submission);
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
-    @GetMapping("/view-homework/{homeworkId}")
+    //@PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/submitted-homeworks/{homeworkId}")
     public ResponseEntity<Map<String, Object>> viewHomework(@PathVariable UUID homeworkId,
-                                                            @RequestParam UUID studentId) {
+                                                            @AuthenticationPrincipal UserDetails loggedStudent) {
         com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework homework = homeworkRepository.findById(homeworkId)
                 .orElseThrow(() -> new RuntimeException("Homework not found"));
 
-        Submission submission = submissionRepository.findByHomeworkIdAndStudentId(homeworkId, studentId)
+        Submission submission = submissionRepository.findByHomeworkIdAndStudentId(homeworkId, ((User)loggedStudent).getId())
                 .orElseThrow(() -> new RuntimeException("Submission not found"));
 
         Optional<Grade> grade = gradeRepository.findBySubmissionId(submission.getSubmissionId());

@@ -3,6 +3,7 @@ package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.*;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,11 +47,11 @@ public class AdminController {
                 .orElseThrow(() -> new RuntimeException("Submission not found"));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/manage-users/role/{userId}")
     public void assignUserRole(@PathVariable UUID userId, @RequestBody Set<Role> roles) {
         User user = findUserById(userId);
-        user.setRoles(roles);
+        user.setRole(roles.iterator().next());
         userRepository.save(user);
     }
 
@@ -69,7 +70,7 @@ public class AdminController {
         userRepository.delete(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/manage-users/homework/{userId}/{submissionId}")
     public void updateGrade(@PathVariable UUID userId, @PathVariable UUID submissionId, @RequestParam BigDecimal score) {
         User user = findUserById(userId);
@@ -84,7 +85,7 @@ public class AdminController {
         gradeRepository.save(grade);
     }
 
-    @PreAuthorize("hasRole('Admin')")
+    //@PreAuthorize("hasRole('Admin')")
     @PostMapping("/manage-users/{userId}")
     public void assignClass(@PathVariable UUID userId,
                             @RequestParam UUID classId) {
@@ -105,7 +106,10 @@ public class AdminController {
         enrollmentRepository.save(enrollment);
     }
 
-
-
+    @PostMapping("/classes")
+    public ResponseEntity<?> createClass(@RequestBody ClassEntity newClass) {
+        classRepository.save(newClass);
+        return ResponseEntity.ok().build();
+    }
 }
 

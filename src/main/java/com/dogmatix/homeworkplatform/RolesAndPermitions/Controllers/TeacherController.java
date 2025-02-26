@@ -6,6 +6,7 @@ import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,8 +30,8 @@ public class TeacherController {
     @Autowired
     private UserRepository userRepository;
 
-    @PreAuthorize("hasRole('TEACHER')")
-    @PostMapping("/homeworks")
+    //@PreAuthorize("hasRole('TEACHER')")
+    //@PostMapping("/homeworks")
     public Homework createHomework(
             @RequestParam String title,
             @RequestParam String description,
@@ -55,8 +56,8 @@ public class TeacherController {
         return homeworkRepository.save(homework);
     }
 
-    @PreAuthorize("hasRole('TEACHER')")
-    @PutMapping("/homeworks/{homeworkId}/publish")
+    //@PreAuthorize("hasRole('TEACHER')")
+    //@PutMapping("/homeworks/{homeworkId}/publish")
     public Homework publishHomework(
             @PathVariable UUID homeworkId,
             @AuthenticationPrincipal User teacher) {
@@ -102,15 +103,15 @@ public class TeacherController {
         return gradeRepository.save(grade);
     }
 
-    @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping("/classes")
+    //@PreAuthorize("hasRole('TEACHER')")
+    //@GetMapping("/classes")
     public List<Map<String, Object>> getAssignedClasses(
-            @AuthenticationPrincipal User teacher) {
+            @AuthenticationPrincipal UserDetails teacher) {
 
         List<Map<String, Object>> result = new ArrayList<>();
 
         List<Enrollment> teacherEnrollments = enrollmentRepository.findByUserIdAndRole(
-                teacher.getId(),
+                ((User)teacher).getId(),
                 Enrollment.Role.TEACHER
         );
 
@@ -137,4 +138,7 @@ public class TeacherController {
 
         return result;
     }
+
+    // get /classes/{id}/students
+    // post /classes/{id}/assign-student
 }

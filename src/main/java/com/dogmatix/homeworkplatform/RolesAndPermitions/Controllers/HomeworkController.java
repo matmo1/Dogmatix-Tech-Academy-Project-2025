@@ -1,10 +1,14 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Homework;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.HomeworkRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,25 +22,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
-
 @RestController
 public class HomeworkController {
 
     @Autowired
     private HomeworkRepository homeworkRepository;
 
-    @GetMapping("/homework/{homeworkUuid}")
+    @GetMapping("/homeworks/{homeworkUuid}")
     public ResponseEntity<Homework> getSpecificHomework(@PathVariable UUID homeworkUuid) {
     Optional<Homework> homework = homeworkRepository.findById(homeworkUuid);
     return homework.map(ResponseEntity::ok)
                   .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<?> postMethodName(@RequestBody Homework homework) {
+    @PostMapping("/homeworks")
+    public ResponseEntity<?> postMethodName(@RequestBody Homework homework,
+                                            @AuthenticationPrincipal UserDetails teacher) {
         try {
+            homework.setCreatedBy(((User)teacher).getId());
+            homework.setDeadline(LocalDateTime.now().plusDays(10));
             Homework saved = homeworkRepository.save(homework);
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
         } catch (Exception e) {
@@ -45,7 +49,7 @@ public class HomeworkController {
         }
     }
     
-    @PutMapping("/update/{id}")
+    @PutMapping("/homeworks/{id}")
     public ResponseEntity<?> updateHomework(
             @PathVariable UUID id,
             @RequestBody Homework homework) {
@@ -60,7 +64,8 @@ public class HomeworkController {
 
         existingHomework.setTitle(homework.getTitle());
         existingHomework.setDescription(homework.getDescription());
-        existingHomework.setDeadline(homework.getDeadline());
+        if (homework.getDeadline() != null)
+            existingHomework.setDeadline(homework.getDeadline());
         existingHomework.setIsPublished(homework.getIsPublished());
         
         Homework updatedHomework = homeworkRepository.save(existingHomework);
@@ -68,7 +73,7 @@ public class HomeworkController {
         return ResponseEntity.ok(updatedHomework);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/homeworks/{id}")
     public ResponseEntity<?> deleteHomework(@PathVariable UUID id) {
         Optional<Homework> optionalHomework = homeworkRepository.findById(id);
 
