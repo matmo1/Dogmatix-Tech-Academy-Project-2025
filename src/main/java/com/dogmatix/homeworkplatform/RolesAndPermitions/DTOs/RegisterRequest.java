@@ -1,12 +1,17 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.DTOs;
 
 
-import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.Role;
-
 public class RegisterRequest {
     private String username;
     private String password;
-    private Role role;
+    private String role;
+
+    public RegisterRequest(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     // Getters and Setters
     public String getUsername() {
         return username;
@@ -24,11 +29,11 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }

@@ -43,17 +43,22 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        boolean isCreated = userService.createUser(registerRequest.getUsername(), 
-        registerRequest.getPassword(), 
-        registerRequest.getRole());
+        System.out.println("Register request received for: " + registerRequest.getUsername());
+        System.out.println("Role: " + registerRequest.getRole());
+
+        boolean isCreated = userService.createUser(registerRequest.getUsername(),
+                registerRequest.getPassword(),
+                registerRequest.getRole());
 
         if (isCreated) {
-            return ResponseEntity.ok().body(Map.of("status", "success", "message", "User registerd successfully"));
+            System.out.println("User registered successfully!");
+            return ResponseEntity.ok().body(Map.of("status", "success", "message", "User registered successfully"));
         } else {
-            return ResponseEntity.ok()
-            .body(Map.of("status", "error", "message", "User registration failed"));
+            System.out.println("User registration failed!");
+            return ResponseEntity.ok().body(Map.of("status", "error", "message", "User registration failed"));
         }
     }
+
 
     @GetMapping("/classes")
     public ResponseEntity<?> getAllClasses() {

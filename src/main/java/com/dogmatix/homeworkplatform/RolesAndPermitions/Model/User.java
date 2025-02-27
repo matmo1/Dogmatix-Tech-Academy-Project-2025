@@ -27,9 +27,8 @@ public class User implements UserDetails {
     @Column(name="password_hash")
     private String password;
 
-    @Column(columnDefinition = "ENUM('STUDENT', 'ADMIN', 'TEACHER')")
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column
+    private String role;
 
     public UUID getId() {
         return userId;
@@ -49,7 +48,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority auth = new SimpleGrantedAuthority("ROLE_" + getRole().name().toUpperCase());
+        SimpleGrantedAuthority auth = new SimpleGrantedAuthority("ROLE_" + getRole().toUpperCase());
         return Stream.of(auth).toList();
     }
 
@@ -61,11 +60,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }

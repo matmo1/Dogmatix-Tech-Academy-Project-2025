@@ -23,15 +23,23 @@ public class UserService {
         return user.isPresent() && passwordEncoder.matches(password, user.get().getPassword());
     }
 
-    public boolean createUser(String username, String password, Role role) {
+    public boolean createUser(String username, String password, String role) {
         if (userRepository.findByUsername(username).isPresent()) {
+            System.out.println("User already exists: " + username);
             return false;
         }
+
+        System.out.println("Creating user: " + username + " with role: " + role);
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.setRole(role);
+        user.setRole(role.toUpperCase()); // Store role in uppercase
+
         userRepository.save(user);
+        System.out.println("User saved successfully!");
+
         return true;
     }
+
 }

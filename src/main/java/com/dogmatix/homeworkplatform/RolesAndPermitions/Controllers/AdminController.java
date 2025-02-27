@@ -49,9 +49,9 @@ public class AdminController {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/manage-users/role/{userId}")
-    public void assignUserRole(@PathVariable UUID userId, @RequestBody Set<Role> roles) {
+    public void assignUserRole(@PathVariable UUID userId, @RequestBody String role) {
         User user = findUserById(userId);
-        user.setRole(roles.iterator().next());
+        user.setRole(role);
         userRepository.save(user);
     }
 
