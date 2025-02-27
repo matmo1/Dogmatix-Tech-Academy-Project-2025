@@ -1,21 +1,19 @@
 package com.dogmatix.homeworkplatform.RolesAndPermitions.Controllers;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Model.User;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.ClassRepository;
+import com.dogmatix.homeworkplatform.RolesAndPermitions.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.dogmatix.homeworkplatform.RolesAndPermitions.DTOs.LoginRequest;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.DTOs.RegisterRequest;
 import com.dogmatix.homeworkplatform.RolesAndPermitions.Service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -28,6 +26,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         boolean isValid = userService.validateUser(loginRequest.getUsername(), loginRequest.getPassword());
@@ -39,7 +40,7 @@ public class UserController {
             .body(Map.of("status", "error", "message", "Invalid username or password"));
         }
     }
-    
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         boolean isCreated = userService.createUser(registerRequest.getUsername(), 
@@ -66,5 +67,11 @@ public class UserController {
         return ResponseEntity.ok().body(cls);
     }
 
+    @GetMapping("/students/{username}")
+    public Optional<User> getStudents(@PathVariable String username){
+        return userRepository.findByUsername(username);
+
+
+    }
 
 }
