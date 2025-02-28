@@ -2,6 +2,19 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import "./HomePageT.css";
 
+const darkenColor = (color, amount = 0.2) => {
+  let r = parseInt(color.slice(1, 3), 16);
+  let g = parseInt(color.slice(3, 5), 16);
+  let b = parseInt(color.slice(5, 7), 16);
+
+  r = Math.max(0, r - r * amount);
+  g = Math.max(0, g - g * amount);
+  b = Math.max(0, b - b * amount);
+
+
+  return `#${Math.round(r).toString(16).padStart(2, "0")}${Math.round(g).toString(16).padStart(2, "0")}${Math.round(b).toString(16).padStart(2, "0")}`;
+};
+
 export default function HomePageT() {
   const { subject } = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,6 +35,17 @@ export default function HomePageT() {
   const [newTask, setNewTask] = useState("");
   const [editingTask, setEditingTask] = useState(null);
   const [taskDetails, setTaskDetails] = useState("");
+  const [streamColor, setStreamColor] = useState("#ffffff");
+  const [sidebarColor, setSidebarColor] = useState("#ffffff");
+
+  const colors = ["#ffadad", "#ffd6a5", "#fdffb6", "#caffbf", "#a0c4ff", "#bdb2ff","#ffffff" ];
+
+  const changeColors = () => {
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    const newColor = colors[randomIndex];
+    setStreamColor(newColor);
+    setSidebarColor(darkenColor(newColor, 0.2)); 
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -98,7 +122,7 @@ export default function HomePageT() {
         ☰ Menu
       </button>
 
-      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+      <div className={`sidebar ${sidebarOpen ? "open" : ""}`} style={{ backgroundColor: sidebarColor }}>
         <button className="close-button" onClick={toggleSidebar}>
           ✖
         </button>
@@ -107,7 +131,11 @@ export default function HomePageT() {
           <Link to="/stream" className="sidebar-button stream-button">
             Stream
           </Link>
+          <button className="sidebar-button stream-button" onClick={changeColors}>
+            Change Colors
+          </button>
         </div>
+
         <h2>Subjects</h2>
         {subjects.map((subj) => (
           <Link
@@ -120,7 +148,7 @@ export default function HomePageT() {
         ))}
       </div>
 
-      <div className="stream-content">
+      <div className="stream-content" style={{ backgroundColor: streamColor }}>
         {subject && (
           <div className="stream-header">
             <h1>{subject} Stream</h1>
@@ -144,8 +172,7 @@ export default function HomePageT() {
           {tasks[subject]?.map((task) => (
             <div key={task.name} className="task-wrapper">
               <div
-                className={`task-header ${expandedTask === task.name ? "active-task" : ""
-                  }`}
+                className={`task-header ${expandedTask === task.name ? "active-task" : ""}`}
                 onClick={() =>
                   setExpandedTask(expandedTask === task.name ? null : task.name)
                 }

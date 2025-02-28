@@ -2,6 +2,22 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import "./HomePageStudent.css";
 
+// Function to darken a color
+const darkenColor = (color, amount = 0.2) => {
+    // Convert the hex color to RGB
+    let r = parseInt(color.slice(1, 3), 16);
+    let g = parseInt(color.slice(3, 5), 16);
+    let b = parseInt(color.slice(5, 7), 16);
+
+    // Apply the darkening effect
+    r = Math.max(0, r - r * amount);
+    g = Math.max(0, g - g * amount);
+    b = Math.max(0, b - b * amount);
+
+    // Convert back to hex and return
+    return `#${Math.round(r).toString(16).padStart(2, "0")}${Math.round(g).toString(16).padStart(2, "0")}${Math.round(b).toString(16).padStart(2, "0")}`;
+};
+
 export default function HomePageStudent() {
     const { subject } = useParams();
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,8 +36,20 @@ export default function HomePageStudent() {
     const [comments, setComments] = useState({});
     const [newComment, setNewComment] = useState("");
 
+    const [streamColor, setStreamColor] = useState("#ffffff"); 
+    const [sidebarColor, setSidebarColor] = useState("#ffffff");
+
+    const colors = ["#ffadad", "#ffd6a5", "#fdffb6", "#caffbf", "#a0c4ff", "#bdb2ff", "#ffffff"];
+
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
+    };
+
+    const changeColors = () => {
+        const randomIndex = Math.floor(Math.random() * colors.length);
+        const newColor = colors[randomIndex];
+        setStreamColor(newColor); 
+        setSidebarColor(darkenColor(newColor, 0.2)); 
     };
 
     const handlePostComment = (task) => {
@@ -40,12 +68,16 @@ export default function HomePageStudent() {
                 ☰ Menu
             </button>
 
-            <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+            <div className={`sidebar ${sidebarOpen ? "open" : ""}`} style={{ backgroundColor: sidebarColor }}>
                 <button className="close-button" onClick={toggleSidebar}>✖</button>
 
                 <div className="sidebar-buttons">
                     <Link to="/stream" className="sidebar-button stream-button">Stream</Link>
+                    <button className="sidebar-button stream-button" onClick={changeColors}>
+                        Change Colors
+                    </button>
                 </div>
+
                 <h2>Subjects</h2>
                 {subjects.map((subj) => (
                     <Link
@@ -58,7 +90,7 @@ export default function HomePageStudent() {
                 ))}
             </div>
 
-            <div className="stream-content">
+            <div className="stream-content" style={{ backgroundColor: streamColor }}>
                 {subject && (
                     <div className="stream-header">
                         <h1>{subject} Stream</h1>
